@@ -64,7 +64,7 @@ const Content=({handleSignOut})=>{
     const cambiarTexto = (text) => {
         setIsAnimating(true)
         setTimeout(() => {
-          setTexts(text);
+          setTexts(text.replace(/\n/g, "<br />"))
           setIsAnimating(false)
         }, 1500)
       };
@@ -99,7 +99,7 @@ const Content=({handleSignOut})=>{
                 }
          
             }
-        
+        console.log(texts)
     
     return(   
         <ChakraProvider theme={theme}> 
@@ -108,7 +108,7 @@ const Content=({handleSignOut})=>{
                    
                     <Center>
                         <Box width={'50%'}> 
-                            <Text fontFamily={'jost'} fontSize={'md'}   >Selección tipo de texto</Text>
+                            <Text fontFamily={'jost'} fontSize={'md'}   >Selección tipo de publicación</Text>
                             <Select focusBorderColor='white' onChange={(e)=>setTipoPublicacion(e.target.value)} >
                             {TipoList.map((opcion, index) => (
                                 <option key={index} value={opcion}>
@@ -195,7 +195,7 @@ const Content=({handleSignOut})=>{
                <Button size='sm' leftIcon={<BsClipboard/>}onClick={() => copyToClipboard(texts)}>Copiar</Button>
                </Flex>
             <Box mt='3%' overflow={'scroll'} height={'80vh'}> 
-          <Text>{texts}</Text>
+            <Text dangerouslySetInnerHTML={{ __html: texts }} />
           </Box>
         </Box>
     
