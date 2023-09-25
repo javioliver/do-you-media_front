@@ -9,14 +9,8 @@ import Content from './Content/index.tsx';
 const theme = extendTheme({
   styles: {
   body:{jost: 'jost'},
-  global: {body: {bg: "gray.100"}}},
   sizes: {iconButton: '10rem'},
-  colors: {
-  color:{
-  500:'#007A7A',
-  700:'#005052',
-  900:'#073030'
-  }}});
+ }});
   
 //COMPONENTE LOGIN
 const App: React.FC = () => {
@@ -70,21 +64,20 @@ const App: React.FC = () => {
       <ChakraProvider theme={theme}> 
       <Flex minH={'100vh'}  bg='gray.100'>
           <Stack marginTop='6%'  direction="column" spacing={8} mx={'auto'} maxW={'xl'} py={25} bg=''>   
-          <Image src={login} width='300px' alt='Login' ></Image>   
             <Box marginTop={'20%'}rounded={'lg'} bg='white' boxShadow={'lg'} p={8} >
               <Stack spacing={8}>
                 <FormControl id="name">
                 <FormLabel color='black' fontStyle={'jost'}>Usuario</FormLabel>
-                <Input  fontStyle={'jost'} focusBorderColor='#007A7A' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Usuario" onKeyDown={handleKeyDown}/>
+                <Input   fontStyle={'jost'} focusBorderColor='red' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Usuario" onKeyDown={handleKeyDown}/>
                 </FormControl>
                 <FormControl id="password">
                 <FormLabel color='black'  fontStyle={'jost'} >Contraseña</FormLabel>
-                <Input fontStyle={'jost'} focusBorderColor='#007A7A' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" onKeyDown={handleKeyDown}/>
+                <Input fontStyle={'jost'} focusBorderColor='red' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" onKeyDown={handleKeyDown}/>
                 </FormControl>
                 <Stack>
                 <Stack direction={{ base: 'column', sm: 'row' }} align={'start'} justify={'space-between'}>
                 </Stack>
-                <Button fontWeight={'normal'} fontStyle={'jost'} _hover={{bg: '#005052', color: 'white' }} color={'white'} bg='teal'  onClick={handleSignIn}>
+                <Button fontWeight={'normal'} fontStyle={'jost'}  bg='red'_hover={{bg: 'red', color: 'white' }} color={'white'}    onClick={handleSignIn}>
                   {isLoading ? <Spinner size="sm" /> : 'Sign in'}
                 </Button>
                 </Stack>
