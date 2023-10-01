@@ -83,8 +83,8 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
     const callLambda=async ()=>{
         setWaiting(true)
         try {
-            console.log({tipoPublicacion:EditDic.tipo,contexto:EditDic.detalles,tema:EditDic.tema,palabrasClave:EditDic.palabrasClave,tono:EditDic.tono,calidad:EditDic.calidad,longitud:EditDic.longitud,numeroPalabras:EditDic.numeroPalabras,incluirConclusion:EditDic.conclusion})
-            const response = await axios.post('https://3lxjimeukuwaybcgxmq4vwdvpa0qglnp.lambda-url.eu-west-3.on.aws',{tipoPublicacion:EditDic.tipo,contexto:EditDic.detalles,tema:EditDic.tema,palabrasClave:EditDic.palabrasClave,tono:EditDic.tono,calidad:EditDic.calidad,longitud:EditDic.longitud,numeroPalabras:EditDic.numeroPalabras,incluirConclusion:EditDic.conclusion});
+            console.log({infoCliente:EditDic.cliente,tipoPublicacion:EditDic.tipo,contexto:EditDic.detalles,tema:EditDic.tema,palabrasClave:EditDic.palabrasClave,tono:EditDic.tono,calidad:EditDic.calidad,longitud:EditDic.longitud,numeroPalabras:EditDic.numeroPalabras,incluirConclusion:EditDic.conclusion})
+            const response = await axios.post('https://3lxjimeukuwaybcgxmq4vwdvpa0qglnp.lambda-url.eu-west-3.on.aws',{infoCliente:EditDic.cliente,tipoPublicacion:EditDic.tipo,contexto:EditDic.detalles,tema:EditDic.tema,palabrasClave:EditDic.palabrasClave,tono:EditDic.tono,calidad:EditDic.calidad,longitud:EditDic.longitud,numeroPalabras:EditDic.numeroPalabras,incluirConclusion:EditDic.conclusion});
               console.log(response)
               setWaiting(false)
             cambiarTexto(response.data)

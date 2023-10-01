@@ -114,7 +114,7 @@ const Content=({handleSignOut})=>{
              <Input placeholder='Busca clientes...' borderRadius={'md'} fontFamily={'jost'} value={searchTerm} onChange={handleSearch} focusBorderColor='red.500'></Input>
              <List spacing={3} mt='3vh' height={'40vh'} overflow='scroll'>
                 {filteredDic.map((elemento, index) => (
-                  <Flex borderRadius={'xl'} shadow={'xl'} bg='red' p={5} color='white' cursor={'pointer'} onClick={()=>handleElementClick(index)}>
+                  <Flex borderRadius={'xl'} shadow={'xl'} bg='red' p={5} color='white' cursor={'pointer'} onClick={()=>{if (index<3){handleElementClick(index)}}}>
                     {elemento}
                   </Flex>
                 ))}
