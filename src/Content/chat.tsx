@@ -95,18 +95,15 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
             }
     return(
     <>
-    <Flex px={'4vw'} py={'2vh'}  flexDirection={'column'} alignItems={'center'} flex={1} height={'100vh'}  bgGradient="linear-gradient(to left, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7  ))">
-              <Text color={'white'} fontSize={'4xl'}>{selectedClient}</Text>
+    <Flex px={'4vw'} py={'2vh'}  flexDirection={'column'} alignItems={'center'} flex={1} height={'100vh'} bg='gray.200'>
+              <Text color={'black'} fontSize={'4xl'}>{selectedClient}</Text>
               <Flex justifyContent={'space-between'} gap={'4.5vw'} alignItems={'center'} mt='2vh'>  
-            <Button position={'absolute'} top='13.5vh' left='6.9vw' size={'xs'} leftIcon={<BsFillInfoCircleFill/>} onClick={()=>setShowInfo(true)}>Datos del cliente</Button>
+            <Button position={'absolute'} top='13.5vh' left='6.9vw' size={'xs'} leftIcon={<BsFillInfoCircleFill/>} onClick={()=>setShowInfo(true)} mt='-0.3vh'fontWeight={'normal'}>Datos del cliente</Button>
            
             <AnimatePresence> 
             {showInfo&&
-             <motion.div initial={{ opacity: 0, y: 0, x: 0 }}animate={{ opacity: 1, y: 0, x: 0 }}exit={{ opacity: 0 ,y: 0, x: 0 }} transition={{ duration: 0.5 }}   style={{ position:'absolute',zIndex: 9999  ,top:'18.5vh' ,left:'6.9vw'}} >
-            <Box bg='white' borderRadius={'xl'} className='showInfoContainer' position={'absolute'} >
-                <Box mt='-1.5vh' ml='0.5vw'> 
-                <Triangle  w = {30} h = {20} direction = "top" color = "white" backgroundColor = "white" />
-                </Box>
+             <motion.div initial={{ opacity: 0, y: 0, x: 0 }}animate={{ opacity: 1, y: 0, x: 0 }}exit={{ opacity: 0 ,y: 0, x: 0 }} transition={{ duration: 0.5 }}   style={{ position:'absolute',zIndex: 9999  ,top:'16.6vh' ,left:'6.9vw'}} >
+            <Box bg='white' borderRadius={'xl'} className='showInfoContainer' position={'absolute'} shadow={'xl'} >
                 <Box p={6}> 
                 <Text fontWeight={'bold'}>Introduzca datos del cliente</Text>
                 <Textarea height={'20vh'} defaultValue={EditDic.cliente} width='20vw'mt='2vh' onChange={(event)=>setEditDic({...EditDic,cliente:event.target.value})} focusBorderColor='red'/>
@@ -114,11 +111,11 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
             </Box>
             </motion.div>}
         </AnimatePresence> 
-                <Box color={'white'} width={'50vw'} fontWeight={'bold'} borderRadius={'xl'} shadow={'xl'} px={10} py={5}bg='red' height={'87vh'}> 
+                <Box color={'white'} width={'50vw'}  borderRadius={'xl'} shadow={'xl'} px={10} py={5} bg='red.600' height={'87vh'}> 
                     <Center>
                         <Box width={'50%'}> 
                             <Text fontFamily={'jost'} fontSize={'md'}   >Selección tipo de publicación</Text>
-                            <Select focusBorderColor='white' onChange={(e)=>setEditDic({...EditDic,tipo:e.target.value})} >
+                            <Select mt='1vh' focusBorderColor='white' onChange={(e)=>setEditDic({...EditDic,tipo:e.target.value})} fontWeight={'normal'} >
                             {TipoList.map((opcion, index) => (
                                 <option key={index} value={opcion}>
                                 {opcion}
@@ -132,7 +129,7 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
                         <Box width='100%'> 
                             <Text mt='2vh' fontFamily={'jost'}>Seleccione palabras claves</Text>
                             <InputGroup  mt='2vh'>
-                            <Input  focusBorderColor='white'value={inputValue} onChange={handleInputChange} />
+                            <Input  focusBorderColor='white'value={inputValue} onChange={handleInputChange} fontWeight={'normal'} />
                             <InputRightElement  >
                                 <Button onClick={handleAgregarClick} >
                                 <Icon  as={AiOutlinePlus}/>
@@ -140,9 +137,9 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
                             </InputRightElement>
                             </InputGroup>
                             
-                            <List height={'18vh'} borderColor={'white'} borderWidth={'1px'} borderRadius={'xl'}  mt='5%' overflow={'scroll'}  py={2}>
+                            <List height={'18vh'} borderColor={'white'} borderWidth={'1px'} borderRadius={'xl'}  mt='5%' overflow={'scroll'}  py={2} fontWeight={'normal'} >
                                 {EditDic.palabrasClave.map((palabra, index) => (
-                                <ListItem key={index} px={5}display="flex" justifyContent="space-between" >
+                                <ListItem key={index} px={5}display="flex" justifyContent="space-between" fontWeight={'normal'} >
                                     {palabra}
                                     <IconButton aria-label='delete' variant={'ghost'}size='sm' _hover={{ bg: 'transparent'}}  color='white'icon={<RxCross2/>} onClick={() => handleBorrarClick(index)}/>
                                </ListItem>
@@ -160,8 +157,8 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
                             </Flex>
                             <Text  mt='2vh'fontFamily={'jost'}>Seleccione calidad</Text>
                             <Flex gap={5}  mt='1vh'>
-                                <Button size='sm' bg={EditDic.calidad?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,calidad:true})}>Alta</Button>
-                                <Button size='sm' bg={!EditDic.calidad?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,calidad:false})}>Media</Button>
+                                <Button size='sm' fontWeight={'normal'} bg={EditDic.calidad?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,calidad:true})}>Alta</Button>
+                                <Button size='sm' fontWeight={'normal'} bg={!EditDic.calidad?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,calidad:false})}>Media</Button>
                             </Flex>
 
                             {EditDic.tipo=='Blog'||EditDic.tipo=='Nota de prensa'?<> 
@@ -171,40 +168,40 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
                             </NumberInput>
                             <Text  mt='2vh' fontFamily={'jost'}>¿Desea añadir una conclusión?</Text>
                             <Flex gap={5}  mt='1vh'>
-                                <Button size='sm' bg={EditDic.conclusion?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,conslusion:true})}>Sí</Button>
-                                <Button size='sm' bg={!EditDic.conclusion?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,conslusion:false})}>No</Button>
+                                <Button size='sm'fontWeight={'normal'}  bg={EditDic.conclusion?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,conslusion:true})}>Sí</Button>
+                                <Button size='sm' fontWeight={'normal'} bg={!EditDic.conclusion?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,conslusion:false})}>No</Button>
                             </Flex>
                             </> :
                             <>
                              <Text mt='2vh'fontFamily={'jost'}>Seleccione longitud</Text>
                              <Flex gap={5}  mt='1vh'>
-                                <Button size='sm' bg={EditDic.longitud=='Corto'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,longitud:'Corto'})}>Corto</Button>
-                                <Button size='sm' bg={EditDic.longitud=='Normal'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,longitud:'Normal'})}>Normal</Button>
-                                <Button size='sm' bg={EditDic.longitud=='Largo'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,longitud:'Largo'})}>Largo</Button>
+                                <Button size='sm' fontWeight={'normal'} bg={EditDic.longitud=='Corto'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,longitud:'Corto'})}>Corto</Button>
+                                <Button size='sm' fontWeight={'normal'} bg={EditDic.longitud=='Normal'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,longitud:'Normal'})}>Normal</Button>
+                                <Button size='sm' fontWeight={'normal'} bg={EditDic.longitud=='Largo'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setEditDic({...EditDic,longitud:'Largo'})}>Largo</Button>
                             </Flex>
                              </>}
                             </Box>           
                         <Box width='100%'> 
                             <Text   mt='2vh' fontFamily={'jost'}>Escriba detalles relevantes</Text> 
                             <Box height={'30vh'}> 
-                            <Textarea   borderRadius={'xl'}placeholder='Introduzca texto'size='sm' focusBorderColor='white' mt='2vh' height={'80%'} value={EditDic.contexto} onChange={(event)=>setEditDic({...EditDic,detalles:event.target.value})}/> 
+                            <Textarea   borderRadius={'xl'}placeholder='Introduzca texto'size='sm'fontWeight={'normal'}  focusBorderColor='white' mt='2vh' height={'80%'} value={EditDic.contexto} onChange={(event)=>setEditDic({...EditDic,detalles:event.target.value})}/> 
                             </Box>
                             <Text  mt='-1vh' fontFamily={'jost'} >Escriba el tema a tratar</Text> 
                             <Box height={'30vh'}>
-                            <Textarea borderRadius={'xl'} placeholder='Introduzca texto'size='sm' focusBorderColor='white' mt='2vh' height={'80%'}  value={EditDic.tema} onChange={(event)=>setEditDic({...EditDic,tema:event.target.value})}/> 
+                            <Textarea borderRadius={'xl'} placeholder='Introduzca texto'size='sm' fontWeight={'normal'} focusBorderColor='white' mt='2vh' height={'80%'}  value={EditDic.tema} onChange={(event)=>setEditDic({...EditDic,tema:event.target.value})}/> 
                             </Box>
                             <Flex   mt='2vh'flexDirection={'row-reverse'}> 
-                            <Button width='40%'leftIcon={waiting?null:<TfiWrite/>}size='sm' onClick={callLambda} >{waiting?<Spinner/>:'Redactar'}</Button>
+                            <Button width='40%'leftIcon={waiting?null:<TfiWrite/>}size='sm' onClick={callLambda} fontWeight={'normal'} >{waiting?<Spinner/>:'Redactar'}</Button>
                             </Flex>
                         </Box>
                     </Flex>             
                     </Box>
-        <Box fontSize={"sm"}color={"white"}width={"37vw"}fontWeight={"bold"}borderRadius={"xl"}shadow={"xl"}py={5}px={8}bg="red">
+        <Box fontSize={"sm"}color={"white"}width={"37vw"}borderRadius={"xl"}shadow={"xl"}py={5}px={8}bg="red.600">
             <Flex flexDirection={'row-reverse'} gap={5}> 
-            <Button size='sm' leftIcon={<BsClipboard/>}onClick={() => copyToClipboard(EditDic.texts)}>Copiar</Button>
+            <Button size='sm' leftIcon={<BsClipboard/>}onClick={() => copyToClipboard(EditDic.texts)} fontWeight={'normal'}>Copiar</Button>
                {EditDic.texts!='Rellene los campos de la izquierda, pulse el botón de redactar y en unos segundos se le mostrará un texto acorde con sus parámetros, gracias.'&&
-               <> {EditDic.tipo=='Post de Instagram' && <Button size='sm' leftIcon={<BsInstagram/>}onClick={() => copyToClipboard(EditDic.texts)}>Publicar</Button>}
-               {EditDic.tipo=='Post de Facebook' && <Button size='sm' leftIcon={<BsFacebook/>}onClick={() => copyToClipboard(EditDic.texts)}>Publicar</Button>}
+               <> {EditDic.tipo=='Post de Instagram' && <Button fontWeight={'normal'}size='sm' leftIcon={<BsInstagram/>}onClick={() => copyToClipboard(EditDic.texts)}>Publicar</Button>}
+               {EditDic.tipo=='Post de Facebook' && <Button fontWeight={'normal'}size='sm' leftIcon={<BsFacebook/>}onClick={() => copyToClipboard(EditDic.texts)}>Publicar</Button>}
 
                </> }
              

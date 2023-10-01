@@ -97,24 +97,24 @@ const Content=({handleSignOut})=>{
   
  return(
   <ChakraProvider theme={theme}>
-      <IconButton icon={<BsPeopleFill/>} aria-label='people' position={'absolute'} top='3vh'left='10vh' color='red' isDisabled={showSettings} onClick={()=>setShowClientes(!showClientes)}/>  
-      <IconButton icon={<BsBarChartLineFill/>} aria-label='settings' position={'absolute'} top='3vh'left='3vh'  isDisabled={showClientes} color='red' onClick={()=>setShowSettings(!showSettings)}/>  
+      <IconButton icon={<BsPeopleFill/>} aria-label='people' position={'absolute'} top='3vh'left='10vh' color='white' bg='red.600' _hover={{color:'white',bg:'red.600'}}isDisabled={showSettings} onClick={()=>setShowClientes(!showClientes)}/>  
+      <IconButton icon={<BsBarChartLineFill/>} aria-label='settings' position={'absolute'} top='3vh'left='3vh' _hover={{color:'white',bg:'red.600'}}  isDisabled={showClientes} color='white' bg='red.600' onClick={()=>setShowSettings(!showSettings)}/>  
          
       <AnimatePresence> 
          {showClientes&&
           <motion.div initial={{ opacity: 0, y: 0, x: 0 }}animate={{ opacity: 1, y: 0, x: 0 }}exit={{ opacity: 0 ,y: 0, x: 0 }} transition={{ duration: 0.5 }}   style={{ position:'absolute',zIndex: 9999  ,top:'8vh' ,left:'10vh'}} >
-            <Box className="showClientesContainer" bg='white' p={5} borderRadius={'xl'} zIndex={100} > 
+            <Box className="showClientesContainer" bg='white' p={5} borderRadius={'xl'} zIndex={100} shadow={'xl'} > 
             <Center> 
                 <Text fontWeight={'bold'} fontSize={'2xl'}>
                   Clientes
                 </Text>
                 </Center>
-              <Button mt='1vh'size='sm' bg='red' color='white' _hover={{bg:'red',color:'white'}} leftIcon={<BsPersonFillAdd/>}>Añadir</Button>
+              <Button mt='1vh'size='sm' bg='red.600' color='white' _hover={{bg:'red.600',color:'white'}} leftIcon={<BsPersonFillAdd/>}>Añadir</Button>
              <Divider mt='1vh' mb='2vh' borderWidth={'1px'}/>
-             <Input placeholder='Busca clientes...' borderRadius={'md'} fontFamily={'jost'} value={searchTerm} onChange={handleSearch} focusBorderColor='red.500'></Input>
+             <Input placeholder='Busca clientes...' borderRadius={'md'} fontFamily={'jost'} value={searchTerm} onChange={handleSearch} focusBorderColor='red.600'></Input>
              <List spacing={3} mt='3vh' height={'40vh'} overflow='scroll'>
                 {filteredDic.map((elemento, index) => (
-                  <Flex borderRadius={'xl'} shadow={'xl'} bg='red' p={5} color='white' cursor={'pointer'} onClick={()=>{if (index<3){handleElementClick(index)}}}>
+                  <Flex borderRadius={'xl'} shadow={'xl'} bg='red.600' p={5} color='white' cursor={'pointer'} onClick={()=>{if (index<3){handleElementClick(index)}}}>
                     {elemento}
                   </Flex>
                 ))}
@@ -183,7 +183,7 @@ const Content=({handleSignOut})=>{
             </Box>
            
             </Flex>
-              <IconButton onClick={()=>setShowSettings(false)} aria-label='return' position={'absolute'}  top='3vh'left='3vh'  icon={<IoMdReturnLeft/>} bg='red' color='white' _hover={{color:'white',bg:'red'}}/>
+              <IconButton onClick={()=>setShowSettings(false)} aria-label='return' position={'absolute'}  top='3vh'left='3vh'  icon={<IoMdReturnLeft/>} bg='red.600' color='white' _hover={{color:'white',bg:'red.600'}}/>
          </Box>
              </>:<Chat selectedClient={selectedClient} EditDic={selectedDic} setEditDic={setSelectedDic}/>}
 
