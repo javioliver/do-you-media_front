@@ -184,9 +184,9 @@ const Chat=({selectedClient,EditDic,setEditDic})=>{
                         <Box width='100%'> 
                             <Text   mt='2vh' fontFamily={'jost'}>Escriba detalles relevantes</Text> 
                             <Box height={'30vh'}> 
-                            <Textarea   borderRadius={'xl'}placeholder='Introduzca texto'size='sm'fontWeight={'normal'}  focusBorderColor='white' mt='2vh' height={'80%'} value={EditDic.contexto} onChange={(event)=>setEditDic({...EditDic,detalles:event.target.value})}/> 
+                            <Textarea   borderRadius={'xl'}placeholder='Introduzca texto'size='sm'fontWeight={'normal'}    focusBorderColor='white' mt='2vh' height={'80%'} value={EditDic.contexto} onChange={(event)=>setEditDic({...EditDic,detalles:event.target.value})}/> 
                             </Box>
-                            <Text  mt='-1vh' fontFamily={'jost'} >Escriba el tema a tratar</Text> 
+                            <Text  mt='-1.6vh' fontFamily={'jost'} >Escriba el tema a tratar</Text> 
                             <Box height={'30vh'}>
                             <Textarea borderRadius={'xl'} placeholder='Introduzca texto'size='sm' fontWeight={'normal'} focusBorderColor='white' mt='2vh' height={'80%'}  value={EditDic.tema} onChange={(event)=>setEditDic({...EditDic,tema:event.target.value})}/> 
                             </Box>
