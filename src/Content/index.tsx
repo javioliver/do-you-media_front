@@ -103,7 +103,7 @@ const Content=({handleSignOut})=>{
       <AnimatePresence> 
          {showClientes&&
           <motion.div initial={{ opacity: 0, y: 0, x: 0 }}animate={{ opacity: 1, y: 0, x: 0 }}exit={{ opacity: 0 ,y: 0, x: 0 }} transition={{ duration: 0.5 }}   style={{ position:'absolute',zIndex: 9999  ,top:'8vh' ,left:'10vh'}} >
-            <Box className="showClientesContainer" bg='white' p={5} borderRadius={'xl'} zIndex={100} shadow={'xl'} > 
+            <Box className="showClientesContainer" bg='white' p={5} borderRadius={'xl'} zIndex={100} style={{boxShadow: '0 0 10px rgba(0, 0, 0, 0.7)' }} > 
             <Center> 
                 <Text fontWeight={'bold'} fontSize={'2xl'}>
                   Clientes
