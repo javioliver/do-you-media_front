@@ -1,12 +1,17 @@
 import React, {useState,useEffect} from 'react'
-import {Flex,Box,extendTheme,ChakraProvider,Button,IconButton,Text,Center,Divider,Input,NumberInput,NumberInputField,Select,Spinner,NumberInputStepper,Slider,SliderMark,SliderTrack,SliderFilledTrack,SliderThumb,Textarea,List,ListItem,InputGroup,InputRightElement,Icon} from '@chakra-ui/react'
+import {Flex,Box,extendTheme,ChakraProvider,Button,IconButton,Text,Center,Input,NumberInput,NumberInputField,Select,Spinner,NumberInputStepper,Slider,SliderMark,SliderTrack,SliderFilledTrack,SliderThumb,Textarea,List,ListItem,InputGroup,InputRightElement,Icon, Divider} from '@chakra-ui/react'
 import "@fontsource/jost"
-import {AiOutlinePlus} from 'react-icons/ai'
-import {BsClipboard} from 'react-icons/bs'
-import {TfiWrite} from 'react-icons/tfi'
-import {RxCross2} from 'react-icons/rx'
+import {AiOutlinePlus,AiTwotoneSetting} from 'react-icons/ai'
+import {BsClipboard,BsPeopleFill,BsBarChartLineFill,BsPersonFillAdd} from 'react-icons/bs'
+import {IoMdReturnLeft} from 'react-icons/io'
 import {motion,AnimatePresence} from 'framer-motion'
-import axios from 'axios';
+
+import Chat from './chat'
+import PieChart from './pages/charts/PieChart.js'
+import DonutChart from './pages/charts/DonutChart.js'
+import ColumnChart from './pages/charts/SortedColumnChart.js'
+import AreaChart from './pages/charts/AreaChart.js'
+
 //PREDEFINIR ESTILOS DE LA APP
 const theme = extendTheme({
     styles: {
@@ -22,191 +27,169 @@ const theme = extendTheme({
 const Content=({handleSignOut})=>{
     const [isComputerWidth,setIsComputerWidth]=useState(true)
 
-    const [tipoPublicacion,setTipoPublicacion]=useState('Post de Instagram')
-    const [tema,setTema]=useState('')
-    const [contexto,setContexto]=useState('')
-    const [tono,setTono]=useState('Profesional')
-    const [longitud,setLongitud]=useState('Normal')
-    const [texts,setTexts]=useState('Rellene los campos de la izquierda, pulse el botón de redactar y en unos segundos se le mostrará un texto acorde con sus parámetros, gracias.')
-    const [calidad,setCalidad]=useState(true)
-    const [waiting,setWaiting]=useState(false)
-
     //Leer los cambios en el tamaño de la pantalla, actualizar las variables y detectar si se trata de una pantalla pequeña
     const handleResize = () => {window.innerWidth=window.innerWidth;window.innerHeight=window.innerHeight;setIsComputerWidth(window.innerWidth > 800)}
     useEffect(() => {handleResize();window.addEventListener("resize", handleResize);return () => {}},[])
 
-   
-    const TipoList=['Post de Instagram','Blog']
-    const [inputValue, setInputValue] = useState('');
-    const [palabrasClaves, setPalabrasClaves] = useState([]);
-    const [numeroPalabras,setNumeroPalabras]=useState(0)
-    const [conclusion,setConclusion]=useState(false)
-    const handleInputChange = (event) => {
-      setInputValue(event.target.value);
-    };
-  
-    const TonoList=["Profesional", "Alegre", "Vacilón", "Serio", "Corporativo", "Jurídico"]
+    //CLIENTES
+    const clientesList=['Clínica dental','Les abelles','Ebike.tienda','Cliente 1.','Cliente 2.', 'Cliente 3.','Cliente 3.','Cliente 4.','Cliente 5.','Cliente 6.']
+    const [showClientes,setShowClientes]=useState(false)
+    const [showSettings,setShowSettings]=useState(false)
 
-    const handleAgregarClick = () => {
-      if (inputValue.trim() !== '') {
-        setPalabrasClaves([...palabrasClaves, inputValue]);
-        setInputValue('');
-      }
+    //BUSCADOR
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredDic, setFilteredDic] = useState(clientesList)
+    function removeAccents(text) {
+      return text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
     }
- 
-    const handleBorrarClick = (index) => {
-      const nuevasPalabrasClaves = palabrasClaves.filter((_, i) => i !== index);
-      setPalabrasClaves(nuevasPalabrasClaves);
-    };
-
-    const [isAnimating, setIsAnimating] = useState(false);
-
-    const cambiarTexto = (text) => {
-        setIsAnimating(true)
-        setTimeout(() => {
-          setTexts(text.replace(/\n/g, "<br />"))
-          setIsAnimating(false)
-        }, 1500)
-      };
-    
-      useEffect(() => {
-        if (isAnimating) {
-          return () => setIsAnimating(false)
+    const handleSearch = (e) => {
+      const term = e.target.value;
+      setSearchTerm(term);
+      const normalizedTerm = removeAccents(term);
+      const filteredList = clientesList.filter((cliente) =>
+        removeAccents(cliente).toLowerCase().includes(normalizedTerm)
+      )
+      setFilteredDic(filteredList);
+    }
+     
+    //FUNCION PARA VER SI SE CLICA FUERA DE LA CAJA
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (showClientes && !event.target.closest('.showClientesContainer')) {
+          setShowClientes(false);
         }
-      }, [isAnimating]);
-
- 
-      function copyToClipboard(text) {
-        navigator.clipboard.writeText(text)
-          .then(() => {
-            alert('Texto copiado');
-          })
-          .catch((error) => {
-            console.error('Error al copiar el texto: ', error);
-          });
       }
+      document.body.addEventListener('click', handleClickOutside);
+      return () => {
+        document.body.removeEventListener('click', handleClickOutside);
+      }
+    }, [showClientes, setShowClientes])
+    
 
-    const callLambda=async ()=>{
-        setWaiting(true)
-        try {
-            console.log({tipoPublicacion:tipoPublicacion,contexto:contexto,tema:tema,palabrasClave:palabrasClaves,tono:tono,calidad:calidad,longitud:longitud,numeroPalabras:numeroPalabras,incluirConclusion:conclusion})
-            const response = await axios.post('https://3lxjimeukuwaybcgxmq4vwdvpa0qglnp.lambda-url.eu-west-3.on.aws',{tipoPublicacion:tipoPublicacion,contexto:contexto,tema:tema,palabrasClave:palabrasClaves,tono:tono,calidad:calidad,longitud:longitud,numeroPalabras:numeroPalabras,incluirConclusion:conclusion});
-              console.log(response)
-              setWaiting(false)
-            cambiarTexto(response.data)
-                } catch (error) {
-                  console.error('Error al llamar a la API:', error);
-                }
+    //DICCIONARIO PARA LA APP
+    const [EditDic,setEditDic]=useState([
+      {tipo:'Post de Instagram',palabrasClave:[],detalles:'',tono:'Profesional',calidad:true,tema:'',longitud:'Normal',numeroPalabras:500,conclusion:false,texts:'Rellene los campos de la izquierda, pulse el botón de redactar y en unos segundos se le mostrará un texto acorde con sus parámetros, gracias.',cliente:''},
+      {tipo:'Post de Instagram',palabrasClave:[],detalles:'',tono:'Profesional',calidad:true,tema:'',longitud:'Normal',numeroPalabras:500,conclusion:false,texts:'Rellene los campos de la izquierda, pulse el botón de redactar y en unos segundos se le mostrará un texto acorde con sus parámetros, gracias.',cliente:''},
+      {tipo:'Post de Instagram',palabrasClave:[],detalles:'',tono:'Profesional',calidad:true,tema:'',longitud:'Normal',numeroPalabras:500,conclusion:false,texts:'Rellene los campos de la izquierda, pulse el botón de redactar y en unos segundos se le mostrará un texto acorde con sus parámetros, gracias.',cliente:''}
+    ])
+    
+    //SELECCIONADO DE CLIENTE 
+    const [selectedClient,setSelectedClient]=useState('Clínica dental')
+    const [selectedDic,setSelectedDic]=useState(EditDic[0])
+    const [Index,setIndex]=useState(0)
+
+    const handleElementClick=(index)=>{
+      //EDITAR LISTA GRANDE
+      const updatedEditDic = [...EditDic]
+      updatedEditDic[Index] = selectedDic
+      setEditDic(updatedEditDic)
+
+      //EIDTAR LAS OTRAS VARIABLES
+      setIndex(index)
+      setSelectedClient(clientesList[index])
+      setSelectedDic(EditDic[index])
+      setShowClientes(false)
+    }
+
+  
+ return(
+  <ChakraProvider theme={theme}>
+      <IconButton icon={<BsPeopleFill/>} aria-label='people' position={'absolute'} top='3vh'left='10vh' color='red' isDisabled={showSettings} onClick={()=>setShowClientes(!showClientes)}/>  
+      <IconButton icon={<BsBarChartLineFill/>} aria-label='settings' position={'absolute'} top='3vh'left='3vh'  isDisabled={showClientes} color='red' onClick={()=>setShowSettings(!showSettings)}/>  
          
-            }
-        console.log(texts)
-    
-    return(   
-        <ChakraProvider theme={theme}> 
-            <Flex justifyContent={'space-between'} py={5} px={'4vw'} alignItems={'center'} flex={1} height={'100vh'}  bgGradient="linear-gradient(to left, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7  ))">      
-                <Box color={'white'} width={'50vw'} fontWeight={'bold'} borderRadius={'xl'} shadow={'xl'} px={10} py={5}bg='red' height={'92vh'} > 
-                   
-                    <Center>
-                        <Box width={'50%'}> 
-                            <Text fontFamily={'jost'} fontSize={'md'}   >Selección tipo de publicación</Text>
-                            <Select focusBorderColor='white' onChange={(e)=>setTipoPublicacion(e.target.value)} >
-                            {TipoList.map((opcion, index) => (
-                                <option key={index} value={opcion}>
-                                {opcion}
-                                </option>
-                            ))}
-                            </Select>
-                        </Box>
-                    </Center>
+      <AnimatePresence> 
+         {showClientes&&
+          <motion.div initial={{ opacity: 0, y: 0, x: 0 }}animate={{ opacity: 1, y: 0, x: 0 }}exit={{ opacity: 0 ,y: 0, x: 0 }} transition={{ duration: 0.5 }}   style={{ position:'absolute',zIndex: 9999  ,top:'8vh' ,left:'10vh'}} >
+            <Box className="showClientesContainer" bg='white' p={5} borderRadius={'xl'} zIndex={100} > 
+            <Center> 
+                <Text fontWeight={'bold'} fontSize={'2xl'}>
+                  Clientes
+                </Text>
+                </Center>
+              <Button mt='1vh'size='sm' bg='red' color='white' _hover={{bg:'red',color:'white'}} leftIcon={<BsPersonFillAdd/>}>Añadir</Button>
+             <Divider mt='1vh' mb='2vh' borderWidth={'1px'}/>
+             <Input placeholder='Busca clientes...' borderRadius={'md'} fontFamily={'jost'} value={searchTerm} onChange={handleSearch} focusBorderColor='red.500'></Input>
+             <List spacing={3} mt='3vh' height={'40vh'} overflow='scroll'>
+                {filteredDic.map((elemento, index) => (
+                  <Flex borderRadius={'xl'} shadow={'xl'} bg='red' p={5} color='white' cursor={'pointer'} onClick={()=>handleElementClick(index)}>
+                    {elemento}
+                  </Flex>
+                ))}
+              </List>
+            </Box>
+            </motion.div>
+          } 
+          </AnimatePresence>
 
-                    <Flex  gap={'5vw'} height={'80%'} justifyContent={'space-between'}>
-                        <Box width='100%'> 
-                            <Text mt='5%' fontFamily={'jost'}>Seleccione palabras claves</Text>
-                            <InputGroup mt='6%' >
-                            <Input  focusBorderColor='white'value={inputValue} onChange={handleInputChange} />
-                            <InputRightElement  >
-                                <Button onClick={handleAgregarClick} >
-                                <Icon  as={AiOutlinePlus}/>
-                                </Button>
-                            </InputRightElement>
-                            </InputGroup>
-                            
-                            <List height={'20%'} borderColor={'white'} borderWidth={'1px'} borderRadius={'xl'}  mt='5%' overflow={'scroll'}  py={2}>
-                                {palabrasClaves.map((palabra, index) => (
-                                <ListItem key={index} px={5}display="flex" justifyContent="space-between" >
-                                    {palabra}
-                                    <IconButton aria-label='delete' variant={'ghost'}size='sm' _hover={{ bg: 'transparent'}}  color='white'icon={<RxCross2/>} onClick={() => handleBorrarClick(index)}/>
-                               </ListItem>
-                                ))}
-                            </List>
-                            <Text mt='10%'fontFamily={'jost'}>Seleccione tono</Text> 
-                            <Flex gap={5} mt='6%'> 
-                            <Select focusBorderColor='white' onChange={(e)=>setTono(e.target.value)}>
-                            {TonoList.map((opcion, index) => (
-                                <option key={index} value={opcion}>
-                                {opcion}
-                                </option>
-                            ))}
-                            </Select>
-                            </Flex>
-                            <Text mt='10%'fontFamily={'jost'}>Seleccione calidad</Text>
-                            <Flex gap={5} mt='6%'>
-                                <Button size='sm' bg={calidad?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setCalidad(true)}>Alta</Button>
-                                <Button size='sm' bg={!calidad?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setCalidad(false)}>Media</Button>
-                            </Flex>
 
-                            {tipoPublicacion=='Blog'?<> 
-                            <Text mt='10%'fontFamily={'jost'}>Seleccione número de palabras</Text>
-                            <NumberInput mt='6%' defaultValue={100} min={100} max={1500} focusBorderColor='white' onChange={(value)=>setNumeroPalabras(parseInt(value))}>
-                            <NumberInputField />
-                            </NumberInput>
-                            <Text mt='10%'fontFamily={'jost'}>¿Desea añadir una conclusión?</Text>
-                            <Flex gap={5} mt='6%'>
-                                <Button size='sm' bg={conclusion?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setConclusion(true)}>Sí</Button>
-                                <Button size='sm' bg={!conclusion?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setConclusion(false)}>No</Button>
-                            </Flex>
-                            </> :
-                            <>
-                             <Text mt='10%'fontFamily={'jost'}>Seleccione longitud</Text>
-                             <Flex gap={5} mt='6%'>
-                                <Button size='sm' bg={longitud=='Corto'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setLongitud('Corto')}>Corto</Button>
-                                <Button size='sm' bg={longitud=='Normal'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setLongitud('Normal')}>Normal</Button>
-                                <Button size='sm' bg={longitud=='Largo'?'gray.500':null}_hover={{bg:'gray.500'}} onClick={()=>setLongitud('Largo')}>Largo</Button>
-                            </Flex>
-                             </>}
-                            </Box>           
-                        <Box width='100%'> 
-                            <Text  mt='5%' fontFamily={'jost'}>Escriba detalles relevantes</Text> 
-                            <Box height={'50%'}> 
-                            <Textarea   borderRadius={'xl'}placeholder='Introduzca texto'size='sm' focusBorderColor='white' mt='5%' height={'80%'} value={contexto} onChange={(event)=>setContexto(event.target.value)}/> 
-                            </Box>
-                            <Text mt='-10%' fontFamily={'jost'} >Escriba el tema a tratar</Text> 
-                            <Box height={'50%'}>
-                            <Textarea borderRadius={'xl'} placeholder='Introduzca texto'size='sm' focusBorderColor='white' mt='5%' height={'80%'}  value={tema} onChange={(event)=>setTema(event.target.value)}/> 
-                            </Box>
-                            <Flex  mt='2.5%'flexDirection={'row-reverse'}> 
-                            <Button width='40%'leftIcon={waiting?null:<TfiWrite/>}size='sm' onClick={callLambda} >{waiting?<Spinner/>:'Redactar'}</Button>
-                            </Flex>
-                        </Box>
-                    </Flex>             
-                    </Box>
-        <Box fontSize={"sm"}color={"white"}width={"37vw"}fontWeight={"bold"}borderRadius={"xl"}shadow={"xl"}py={5}px={8}bg="red"height={"92vh"}>
-            <Flex flexDirection={'row-reverse'}> 
-               <Button size='sm' leftIcon={<BsClipboard/>}onClick={() => copyToClipboard(texts)}>Copiar</Button>
-               </Flex>
-            <Box mt='3%' overflow={'scroll'} height={'80vh'}> 
-            <Text dangerouslySetInnerHTML={{ __html: texts }} />
+          {showSettings ?<>
+         <Box height='100vh' width={'100vw'} bg='gray.200' zIndex={1000} position={'absolute'} top='0%' left={'0%'} p={5} >
+          <Flex gap={10} color="color.900" fontFamily="jost" justifyContent={'center'}>
+          <Box textAlign="center" alignItems="center"> 
+            <Text fontSize="3xl" fontWeight="bold">56</Text>
+            <Text>Clientes activos</Text>
           </Box>
-        </Box>
-    
+          <Box textAlign="center" alignItems="center">
+            <Text fontSize="3xl" fontWeight="bold">923</Text>
+            <Text>Publicaciones totales</Text>
+          </Box>
+          <Box textAlign="center" alignItems="center">
+            <Text fontSize="3xl" fontWeight="bold">38</Text>
+            <Text>Publicaciones/semana</Text>
+          </Box>
+          </Flex>
+          <Flex gap={10} mt='6vh' px='2vw'>
+              <Box>
+                <Text fontWeight={'bold'}>Evolución de clientes</Text>
+                  <Box height={'33vh'} width={'50vw'}>
+                    <AreaChart xaxis={['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre']} yaxis={[40,37,33,38,40,45,46,52,56]}ytitle={'Clientes activos'}color='red'/>
+                  </Box>
+              </Box>
+              <Box>
+                <Text fontWeight={'bold'}>Publicaciones por cliente</Text>
+                  <Box height={'33vh'} width={'20vw'}>
+                    <PieChart data={[15,13,12,8,8,7,5,4]}labels={['Cliente 1.','Cliente 2.','Otros','Cliente 3.','Cliente 4..','Cliente 5.','Cliente 6.','Cliente 7.']}add={' publicaciones'}/>
+                  </Box>
+              </Box>
+              <Box>
+                <Text fontWeight={'bold'}>Lista de clientes</Text>
+                  <Box height={'31vh'} width={'20vw'} overflow='scroll' borderRadius={'xl'} mt='2vh'>
+                  <List spacing={-3}>
+                      {clientesList.map((elemento, index) => (
+                         <ListItem style={{ display: 'flex', alignItems: 'center' }}>  
+                           <span style={{ fontSize: '2.5em', marginRight: '0.5em' }}>&bull; </span> 
+                           <span style={{ fontSize: '1em' }}>{elemento}</span>
+                          </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+              </Box> 
+          </Flex>
+          <Flex gap={10} mt='6vh' px='2vw'>
+          <Box>
+              <Text fontWeight={'bold'}>Evolución de publicaciones escritas</Text>
+              <Box height={'33vh'} width={'50vw'} >
+                <ColumnChart xaxis={['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre']} yaxis={[90,87,73,98,100,105,99,123,130]} ytitle={'Número de publicaciones'}fontSize={10} />
+              </Box>
+            </Box>
+            <Box>
+              <Text fontWeight={'bold'}>Publicaciones por tipo</Text>
+                <Box height={'33vh'} width={'20vw'} >
+                  <DonutChart data={[30,24,23,12,9,6]} labels={['Post de Instagram','Post de Facebook','Nota de prensa','Blog','Guión televisión','Post de twitter']}/>
+                </Box>
+            </Box>
+           
+            </Flex>
+              <IconButton onClick={()=>setShowSettings(false)} aria-label='return' position={'absolute'}  top='3vh'left='3vh'  icon={<IoMdReturnLeft/>} bg='red' color='white' _hover={{color:'white',bg:'red'}}/>
+         </Box>
+             </>:<Chat selectedClient={selectedClient} EditDic={selectedDic} setEditDic={setSelectedDic}/>}
 
-                </Flex>
-        </ChakraProvider>
-    )
+    </ChakraProvider>
+ )
+     
 }
 
 export default Content
-
- 
-
- 
